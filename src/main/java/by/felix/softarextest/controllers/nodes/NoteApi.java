@@ -2,13 +2,18 @@ package by.felix.softarextest.controllers.nodes;
 
 import by.felix.softarextest.customException.APPException;
 import by.felix.softarextest.entities.Note;
+import org.springframework.security.core.Authentication;
 
 import java.util.List;
 
 public interface NoteApi {
-    public List<Note> getNotes() throws APPException;
+    List<Note> getAllUserNotes(Authentication authentication) throws APPException;
 
-    public Note saveNote(Note note);
+    Note getNote(long noteId, Authentication authentication) throws APPException;
 
-    public void deleteNote(long noteId);
+    String saveNote(Note note, Authentication authentication);
+
+    void deleteNote(long noteId, Authentication authentication) throws APPException;
+
+    void deleteAllNotes(long userId);
 }

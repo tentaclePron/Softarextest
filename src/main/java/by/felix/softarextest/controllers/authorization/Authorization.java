@@ -6,7 +6,7 @@ import by.felix.softarextest.customException.APPException;
 import by.felix.softarextest.entities.User;
 
 public interface Authorization {
-    public String regUser(User user);
+    public String regUser(User user) throws APPException;
 
     public AuthResponse auth(AuthorizationRequest authorizationRequest) throws APPException;
 }

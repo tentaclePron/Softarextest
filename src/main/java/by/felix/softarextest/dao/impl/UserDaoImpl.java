@@ -1,23 +1,23 @@
-package by.felix.softarextest.crud.impl;
+package by.felix.softarextest.dao.impl;
 
 import by.felix.softarextest.customException.APPException;
 import by.felix.softarextest.entities.User;
 import by.felix.softarextest.repository.UserRepository;
-import by.felix.softarextest.crud.UserCrud;
+import by.felix.softarextest.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class UserCrudImpl implements UserCrud {
+public class UserDaoImpl implements UserDao {
 
     private UserRepository userRepository;
-    private BCryptPasswordEncoder encoder;
+    private PasswordEncoder encoder;
 
     @Autowired
-    public void setEncoder(BCryptPasswordEncoder encoder) {
+    public void setEncoder(PasswordEncoder encoder) {
         this.encoder = encoder;
     }
 
@@ -27,9 +27,13 @@ public class UserCrudImpl implements UserCrud {
     }
 
     @Override
-    public User regUser(User user) {
+    public void regUser(User user) throws APPException {
         user.setPassword(encoder.encode(user.getPassword()));
-        return userRepository.saveAndFlush(user);
+        try {
+            userRepository.saveAndFlush(user);
+        } catch (Exception ex) {
+            throw new APPException("This username is taken");
+        }
     }
 
     @Override

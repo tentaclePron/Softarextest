@@ -16,33 +16,26 @@ import java.io.Serializable;
 @NoArgsConstructor
 @Data
 @TypeDef(name = "jsonb", typeClass = JsonBinaryType.class)
-@Table(name = "NOTE")
+@Table
 public class Note implements Serializable {
 
-    @Column(name = "TITLE", nullable = false)
+    @Column(nullable = false)
     private String title;
 
-    @Column(name = "CONTENT", nullable = false)
+    @Column(nullable = false)
     private String content;
 
     @Type(type = "jsonb")
-    @Column(columnDefinition = "jsonb", name = "FIELDS")
-    private Field fields;
+    @Column(columnDefinition = "jsonb")
+    private Fields fields;
 
-    @ManyToOne(targetEntity = User.class)
-    @Column(name = "USERID", nullable = false)
-    private long userId;
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = User.class, optional = false)
+    @JoinColumn(name = "USERID")
+    private User userId;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private long id;
+    private Long id;
 
-    public void setId(long id) {
-        this.id = id;
-    }
 
-    @Id
-    public long getId() {
-        return id;
-    }
 }

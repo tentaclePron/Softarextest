@@ -6,29 +6,23 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
-@Table(name = "USER")
-@DiscriminatorValue("USER")
+
+@Table(name = "USER_ENTITY") //postgres cant have table "user".... soo yea
+@DiscriminatorValue("USER_ENTITY")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Entity
 public class User implements Serializable {
 
-    @Column(nullable = false, name = "USERNAME", unique = true)
+    @Column(nullable = false, unique = true)
     private String username;
 
-    @Column(nullable = false, name = "PASSWORD")
+    @Column(nullable = false)
     private String password;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public long getId() {
-        return id;
-    }
 }

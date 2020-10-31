@@ -1,4 +1,4 @@
-package by.felix.softarextest.crud;
+package by.felix.softarextest.dao;
 
 
 import by.felix.softarextest.customException.APPException;
@@ -6,12 +6,11 @@ import by.felix.softarextest.entities.Note;
 
 import java.util.List;
 
-public interface NoteCrud {
+public interface NoteDao {
 
-    Note addNote(Note note);
-    void deleteNote(long id);
+    Note addOrUpdateNote(Note note);
+    void deleteNote(long id, long userId) throws APPException;
     Note getNoteByIdAndValidate(long noteId, long userId) throws APPException;
-    Note getNoteById(Long noteId) throws APPException;
-    Note updateNote(Note note);
     List<Note> getAllUserNotes(long userId) throws APPException;
+    void deleteAllUserNotes(long userId);
 }

@@ -1,7 +1,7 @@
 package by.felix.softarextest.filters;
 
 import by.felix.softarextest.config.jwt.JwtProvider;
-import by.felix.softarextest.crud.UserCrud;
+import by.felix.softarextest.dao.UserDao;
 import by.felix.softarextest.entities.User;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
@@ -27,25 +27,24 @@ public class JwtFilter extends GenericFilterBean {
     public static final String AUTHORIZATION = "Authorization";
 
     private JwtProvider jwtProvider;
-    private UserCrud userCrud;
+    private UserDao userDao;
 
     @Autowired
     public void setJwtProvider(JwtProvider jwtProvider) {
         this.jwtProvider = jwtProvider;
     }
     @Autowired
-    public void setUserCrud(UserCrud userCrud) {
-        this.userCrud = userCrud;
+    public void setUserCrud(UserDao userDao) {
+        this.userDao = userDao;
     }
 
     @SneakyThrows
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        logger.info("do filter...");
         String token = getTokenFromRequest((HttpServletRequest) servletRequest);
         if (token != null && jwtProvider.validateToken(token)) {
             String userLogin = jwtProvider.getLoginFromToken(token);
-            User user = userCrud.getByUsername(userLogin);
+            User user = userDao.getByUsername(userLogin);
             UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, null);
             SecurityContextHolder.getContext().setAuthentication(auth);
         }

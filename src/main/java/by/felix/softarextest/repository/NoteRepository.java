@@ -13,4 +13,7 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
     @Query("select n from Note n where n.userId = :userId")
     Optional<List<Note>> getAllUserNotes(@Param("userId") long userId);
 
+    @Query("delete from Note n where n.userId = :userId")
+    void deleteAllByUserId(@Param("userId") long userId);
+
 }
