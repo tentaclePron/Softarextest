@@ -1,6 +1,9 @@
 package by.felix.softarextest.customException;
 
 
+/**
+ * Default Exception for this application
+ */
 public class APPException extends Exception {
 
     public APPException(String message) {

@@ -8,8 +8,8 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 @ControllerAdvice
 public class APPExceptionHandler extends ResponseEntityExceptionHandler {
-    @ExceptionHandler(APPException.class)
-    protected ResponseEntity<Object> handleAPPException(APPException e){
+    @ExceptionHandler({Exception.class, APPException.class})
+    protected ResponseEntity<Object> handleAPPException(Exception e){
         return new ResponseEntity<>(e, HttpStatus.I_AM_A_TEAPOT);
     }
 }

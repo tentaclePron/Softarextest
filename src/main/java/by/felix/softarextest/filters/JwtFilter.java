@@ -1,8 +1,9 @@
 package by.felix.softarextest.filters;
 
 import by.felix.softarextest.config.jwt.JwtProvider;
-import by.felix.softarextest.dao.UserDao;
+import by.felix.softarextest.customException.APPException;
 import by.felix.softarextest.entities.User;
+import by.felix.softarextest.repository.UserRepository;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ import java.io.IOException;
 
 import static org.springframework.util.StringUtils.hasText;
 
+/**
+ * Authorise jwt filter
+ */
 @Component
 @Log
 public class JwtFilter extends GenericFilterBean {
@@ -27,15 +31,15 @@ public class JwtFilter extends GenericFilterBean {
     public static final String AUTHORIZATION = "Authorization";
 
     private JwtProvider jwtProvider;
-    private UserDao userDao;
+    private UserRepository userRepository;
 
     @Autowired
     public void setJwtProvider(JwtProvider jwtProvider) {
         this.jwtProvider = jwtProvider;
     }
     @Autowired
-    public void setUserCrud(UserDao userDao) {
-        this.userDao = userDao;
+    public void setUserCrud(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @SneakyThrows
@@ -44,7 +48,7 @@ public class JwtFilter extends GenericFilterBean {
         String token = getTokenFromRequest((HttpServletRequest) servletRequest);
         if (token != null && jwtProvider.validateToken(token)) {
             String userLogin = jwtProvider.getLoginFromToken(token);
-            User user = userDao.getByUsername(userLogin);
+            User user = userRepository.findByUsername(userLogin).orElseThrow(() -> new APPException("User has been deleted"));
             UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(user, null);
             SecurityContextHolder.getContext().setAuthentication(auth);
         }

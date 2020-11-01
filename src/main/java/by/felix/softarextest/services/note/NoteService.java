@@ -5,6 +5,9 @@ import by.felix.softarextest.entities.Note;
 
 import java.util.List;
 
+/**
+ * Note entity service
+ */
 public interface NoteService {
 
     List<Note> getAllUserNotes(long userId) throws APPException;

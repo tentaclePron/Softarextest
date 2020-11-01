@@ -10,6 +10,7 @@ import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Map;
 
 @Entity
 @AllArgsConstructor
@@ -27,15 +28,14 @@ public class Note implements Serializable {
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
-    private Fields fields;
+    private Map<String, String> fields;
 
-    @ManyToOne(fetch = FetchType.EAGER, targetEntity = User.class, optional = false)
-    @JoinColumn(name = "USERID")
+    @ManyToOne(fetch = FetchType.EAGER, targetEntity = User.class)
+    @JoinColumn(name = "USERID", nullable = false)
     private User userId;
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
-
 
 }
